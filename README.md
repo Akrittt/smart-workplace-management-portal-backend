@@ -62,5 +62,113 @@ Before running this application, ensure you have:
 - **PostgreSQL 15+** ([Download](https://www.postgresql.org/download/))
 - **Groq API Key** - Free from [console.groq.com](https://console.groq.com/keys)
 
+  
+## 📁 Project Structure
+
+```
+src/
+├── main/
+│ ├── java/com/example/Smart/Workplace/Management/Portal/
+│ │ ├── controller/ # REST API Controllers
+│ │ │ ├── AuthController.java
+│ │ │ ├── LeaveController.java
+│ │ │ ├── ComplaintController.java
+│ │ │ ├── AdminController.java
+│ │ │ └── AIAssistantController.java
+│ │ ├── service/ # Business Logic
+│ │ │ ├── AuthService.java
+│ │ │ ├── LeaveService.java
+│ │ │ ├── ComplaintService.java
+│ │ │ ├── AIAssistantService.java
+│ │ │ └── GroqAIService.java
+│ │ ├── repository/ # Database Access
+│ │ │ ├── UserRepository.java
+│ │ │ ├── LeaveRequestRepository.java
+│ │ │ ├── ComplaintRepository.java
+│ │ │ └── ChatMessageRepository.java
+│ │ ├── model/ # Entity Classes
+│ │ │ ├── User.java
+│ │ │ ├── LeaveRequest.java
+│ │ │ ├── Complaint.java
+│ │ │ └── ChatMessage.java
+│ │ ├── dto/ # Data Transfer Objects
+│ │ │ ├── AuthResponse.java
+│ │ │ ├── LeaveRequestDto.java
+│ │ │ └── ComplaintDto.java
+│ │ └── security/ # Security Configuration
+│ │ ├── SecurityConfig.java
+│ │ ├── JwtAuthFilter.java
+│ │ ├── JwtService.java
+│ │ └── UserDetailsServiceImpl.java
+│ └── resources/
+│ └── application.properties
+└── test/ # Unit Tests
+
+```
+
+
+## 🔌 API Endpoints
+
+### Authentication
+```
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/auth/register` | Register new user | No |
+| POST | `/api/auth/login` | Login user | No |
+```
+### Leave Management
+```
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/leave/submit` | Submit leave request | Yes |
+| GET | `/api/leave/my-requests` | Get user's leaves | Yes |
+| GET | `/api/leave/all` | Get all leaves (Manager/Admin) | Yes |
+| PUT | `/api/leave/{id}/approve` | Approve leave | Manager/Admin |
+| PUT | `/api/leave/{id}/reject` | Reject leave | Manager/Admin |
+```
+### Complaint Management
+```
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/complaints` | File complaint | Yes |
+| GET | `/api/complaints/my` | Get user's complaints | Yes |
+| GET | `/api/complaints/all` | Get all complaints | Manager/Admin |
+| PUT | `/api/complaints/{id}/assign/{staffId}` | Assign complaint | Manager/Admin |
+| PUT | `/api/complaints/{id}` | Update complaint status | Yes |
+
+### AI Assistant
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/ai-assistant/chat` | Chat with AI | Yes |
+| GET | `/api/ai-assistant/history` | Get chat history | Yes |
+```
+### Admin Panel
+```
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/api/admin/users` | Get all users | Admin |
+| PUT | `/api/admin/users/{id}/toggle-active` | Toggle user status | Admin |
+| PUT | `/api/admin/users/{id}/role` | Update user role | Admin |
+| GET | `/api/admin/dashboard` | Get dashboard stats | Admin |
+| GET | `/api/admin/analytics/leaves` | Leave analytics | Admin |
+```
+## 🔑 Environment Variables
+
+
+## 🔒 Security Best Practices
+
+- ✅ Passwords are hashed using BCrypt
+- ✅ JWT tokens expire after 24 hours
+- ✅ CORS configured for specific origins
+- ✅ Input validation on all endpoints
+- ✅ SQL injection prevention via JPA
+- ✅ Rate limiting (configure as needed)
+
+
+
+
+
+
 
 
