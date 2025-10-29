@@ -62,7 +62,5 @@ Before running this application, ensure you have:
 - **PostgreSQL 15+** ([Download](https://www.postgresql.org/download/))
 - **Groq API Key** - Free from [console.groq.com](https://console.groq.com/keys)
 
-## 🚀 Getting Started
 
-### 1. Clone the Repository
 
