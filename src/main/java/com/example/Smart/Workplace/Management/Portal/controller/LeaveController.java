@@ -22,7 +22,6 @@ public class LeaveController {
 
     /**
      * Submit a new leave request
-     * Accessible by all authenticated users
      */
     @PostMapping("/submit")
     public ResponseEntity<LeaveRequestDto> submitLeave(
@@ -35,7 +34,6 @@ public class LeaveController {
 
     /**
      * Get all leave requests for the authenticated user
-     * Accessible by all authenticated users
      */
     @GetMapping("/my-requests")
     public ResponseEntity<List<LeaveRequestDto>> getMyLeaveRequests(Authentication authentication) {
@@ -57,7 +55,6 @@ public class LeaveController {
 
     /**
      * Approve a leave request
-     * Accessible only by MANAGER and ADMIN roles
      */
     @PutMapping("/{id}/approve")
     @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
@@ -71,7 +68,6 @@ public class LeaveController {
 
     /**
      * Reject a leave request
-     * Accessible only by MANAGER and ADMIN roles
      */
     @PutMapping("/{id}/reject")
     @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")

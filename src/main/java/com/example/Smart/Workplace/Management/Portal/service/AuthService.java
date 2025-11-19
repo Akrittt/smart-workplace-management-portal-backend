@@ -35,10 +35,6 @@ public class AuthService {
 
     /**
      * Register a new user
-     *
-     * @param request Registration details
-     * @return Authentication response with JWT token
-     * @throws IllegalArgumentException if email already exists
      */
     @Transactional
     public AuthResponse register(RegisterRequest request) {
@@ -59,7 +55,7 @@ public class AuthService {
                 .lastName(request.getLastName())
                 .email(request.getEmail().toLowerCase().trim()) // Normalize email
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(determineUserRole(request)) // Dynamic role assignment
+                .role(determineUserRole(request))
                 .active(true)
                 .department(request.getDepartment())
                 .build();
@@ -145,9 +141,6 @@ public class AuthService {
 
     /**
      * Validate password strength
-     *
-     * @param password Password to validate
-     * @throws IllegalArgumentException if password doesn't meet requirements
      */
     private void validatePassword(String password) {
         if (password == null || password.length() < 8) {
@@ -168,22 +161,15 @@ public class AuthService {
 
     /**
      * Determine user role based on registration request
-     * Can be extended to support role-based registration
-     *
-     * @param request Registration request
-     * @return User role
      */
     private Role determineUserRole(RegisterRequest request) {
-        // Default role is EMPLOYEE
-        // You can extend this to check request.getRole() if you want to allow role selection
+        // at present default role is EMPLOYEE
+        // later i can add dynamic role assignment using email domain
         return Role.EMPLOYEE;
     }
 
     /**
      * Refresh JWT token (optional feature)
-     *
-     * @param oldToken Existing valid token
-     * @return New JWT token
      */
     @Transactional(readOnly = true)
     public AuthResponse refreshToken(String oldToken) {

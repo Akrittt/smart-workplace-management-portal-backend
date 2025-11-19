@@ -21,9 +21,8 @@ import java.util.stream.Collectors;
 
 /**
  * Admin Controller
- * Handles all admin-specific operations
- * Only accessible by users with ADMIN role
  */
+
 @RestController
 @RequestMapping("/api/admin")
 @PreAuthorize("hasRole('ADMIN')")
@@ -104,7 +103,7 @@ public class AdminController {
     }
 
     /**
-     * Delete user (soft delete - set inactive)
+     * Delete user
      */
     @DeleteMapping("/users/{id}")
     public ResponseEntity<Map<String, String>> deleteUser(@PathVariable Long id) {
@@ -113,12 +112,7 @@ public class AdminController {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + id));
 
-        // Soft delete - just deactivate
-        user.setActive(false);
-        userRepository.save(user);
-
-        // For hard delete, uncomment:
-        // userRepository.delete(user);
+        userRepository.delete(user);
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "User deleted successfully");
@@ -303,7 +297,7 @@ public class AdminController {
     }
 
     /**
-     * Get system overview (dashboard data)
+     * Dashboard data
      */
     @GetMapping("/dashboard")
     public ResponseEntity<Map<String, Object>> getDashboardData() {

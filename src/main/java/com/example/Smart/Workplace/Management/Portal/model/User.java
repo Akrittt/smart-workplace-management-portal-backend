@@ -25,8 +25,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "password") // Don't log passwords
-@EqualsAndHashCode(of = "id") // Only use ID for equals/hashCode
+@ToString(exclude = "password")
+@EqualsAndHashCode(of = "id")
 public class User implements UserDetails {
 
     @Id
@@ -121,16 +121,12 @@ public class User implements UserDetails {
 
     /**
      * Indicates whether the user is enabled or disabled
-     * A disabled user cannot be authenticated
      */
     @Override
     public boolean isEnabled() {
         return active;
     }
 
-    /**
-     * Helper method to get full name
-     */
     @Transient
     public String getFullName() {
         return firstName + " " + lastName;

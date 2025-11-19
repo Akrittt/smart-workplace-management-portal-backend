@@ -70,7 +70,7 @@ public class ComplaintController {
     }
 
     /**
-     * Assign complaint to staff (MANAGER/ADMIN only)
+     * Assign complaint to staff
      */
     @PutMapping("/{id}/assign/{staffId}")
     @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
@@ -83,7 +83,7 @@ public class ComplaintController {
     }
 
     /**
-     * Update complaint status/resolution (Assigned staff or ADMIN)
+     * Update complaint status/resolution
      */
     @PutMapping("/{id}")
     public ResponseEntity<ComplaintDto> updateComplaint(

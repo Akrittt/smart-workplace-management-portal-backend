@@ -34,7 +34,7 @@ public class ChatMessage {
     private LocalDateTime createdAt;
 
     @Column(name = "intent")
-    private String intent; // e.g., "leave_request", "leave_balance", "policy_question"
+    private String intent;
 
     @Column(name = "confidence")
     private Double confidence;

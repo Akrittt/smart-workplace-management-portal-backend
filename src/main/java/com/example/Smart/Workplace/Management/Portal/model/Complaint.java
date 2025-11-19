@@ -36,7 +36,7 @@ public class Complaint {
     private User user;
 
     /**
-     * Title/subject of the complaint
+     * Subject of the complaint
      */
     @Column(name = "title", nullable = false, length = 200)
     private String title;
@@ -114,16 +114,4 @@ public class Complaint {
         }
     }
 
-    /**
-     * Helper methods
-     */
-    @Transient
-    public boolean isOpen() {
-        return status == ComplaintStatus.OPEN;
-    }
-
-    @Transient
-    public boolean isAssigned() {
-        return assignedTo != null;
-    }
 }
