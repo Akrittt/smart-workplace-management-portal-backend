@@ -1,4 +1,4 @@
-package com.example.Smart.Workplace.Management.Portal.security;
+package com.example.Smart.Workplace.Management.Portal.config;
 
 import com.example.Smart.Workplace.Management.Portal.model.User;
 import com.example.Smart.Workplace.Management.Portal.repository.UserRepository;
