@@ -24,12 +24,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
 
     /**
-     * Load user by email (username in our case)
+     * Load user by email
      * This method is called by Spring Security during authentication
-     *
-     * @param username Email address of the user
-     * @return UserDetails object containing user authentication information
-     * @throws UsernameNotFoundException if user is not found
      */
     @Override
     @Cacheable(value = "userDetailsCache", key = "#username", unless = "#result == null")
