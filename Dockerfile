@@ -10,8 +10,7 @@ RUN mvn -B -q -DskipTests dependency:go-offline
 COPY src ./src
 RUN mvn -B -DskipTests package
 
-# Allow passing JAR name from build time (fallback to the expected artifact)
-ARG JAR_FILE=target/Smart-Workplace-Management-Portal-0.0.1-SNAPSHOT.jar
+COPY --from=build --chown=app:app /app/target/*.jar app.jar
 
 # Stage 2: Run image (smaller, but ensure CA certs are present)
 FROM eclipse-temurin:17-jre-alpine
@@ -25,8 +24,6 @@ USER app
 
 WORKDIR /home/app
 
-# Copy built jar from builder stage
-COPY --from=build --chown=app:app ${JAR_FILE} app.jar
 
 # Allow Render to pass a port; fallback 8080 locally
 ENV SERVER_PORT=${PORT:-8080}
