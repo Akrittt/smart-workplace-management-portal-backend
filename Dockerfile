@@ -18,8 +18,6 @@ FROM eclipse-temurin:17-jre-alpine
 
 # Install CA certs so SSL (Supabase) works; keep image small
 RUN apk add --no-cache ca-certificates bash
-# (optional) add curl for healthchecks:
-# RUN apk add --no-cache curl
 
 # Create a non-root user for security
 RUN addgroup -S app && adduser -S -G app app
