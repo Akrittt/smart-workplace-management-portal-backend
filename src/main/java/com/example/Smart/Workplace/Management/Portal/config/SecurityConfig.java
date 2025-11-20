@@ -45,7 +45,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Disable CSRF (not needed for stateless JWT authentication)
+                // Disable CSRF
                 .csrf(csrf -> csrf.disable())
 
                 // Configure CORS
@@ -109,7 +109,8 @@ public class SecurityConfig {
 
         // Allow multiple origins (development environments)
         configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:5173"
+                "http://localhost:5173",
+                "smart-workplace-management-portal.vercel.app"
         ));
 
         // Allow all headers
