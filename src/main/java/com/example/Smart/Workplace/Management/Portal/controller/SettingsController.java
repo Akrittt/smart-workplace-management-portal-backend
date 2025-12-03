@@ -12,7 +12,7 @@ import java.util.Map;
 @RequestMapping("/api/admin/settings")
 @PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:5173"})
+@CrossOrigin(origins = {"smart-workplace-management-portal.vercel.app"})
 public class SettingsController {
 
     @GetMapping

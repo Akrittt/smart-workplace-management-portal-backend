@@ -16,7 +16,7 @@ import java.util.Map;
 @RequestMapping("/api/ai-assistant")
 @RequiredArgsConstructor
 @Slf4j
-@CrossOrigin(origins = {"http://localhost:5173"})
+@CrossOrigin(origins = {"smart-workplace-management-portal.vercel.app"})
 public class AIAssistantController {
 
     private final AIAssistantService aiAssistantService;

@@ -17,15 +17,11 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    // ============= Find Methods =============
-
     /**
      * Find user by email
      */
     Optional<User> findByEmail(String email);
 
-
-    // ============= Exists Methods =============
 
     /**
      * Check if user exists by email
@@ -37,7 +33,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
      */
     boolean existsById(Long id);
 
-    // ============= Count Methods =============
 
     /**
      * Count users by role
@@ -49,8 +44,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
      */
     long countByActive(Boolean active);
 
-
-    // ============= Custom JPQL Query =============
 
     /**
      * Get department statistics

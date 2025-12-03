@@ -15,12 +15,26 @@ import java.util.List;
 
 /**
  * Repository interface for LeaveRequest entity
+ * PostgreSQL Compatible Version
  */
 @Repository
 public interface LeaveRequestRepository extends JpaRepository<LeaveRequest, Long> {
 
     List<LeaveRequest> findByEmployeeId(Long employeeId);
 
+    List<LeaveRequest> findByEmployeeIdAndStatus(Long employeeId, LeaveStatus status);
+
+    default List<LeaveRequest> findPendingByEmployeeId(Long employeeId) {
+        return findByEmployeeIdAndStatus(employeeId, LeaveStatus.PENDING);
+    }
+
+
+    @Query("SELECT lr FROM LeaveRequest lr " +
+            "JOIN lr.employee e " +
+            "WHERE e.department = :department " +
+            "AND lr.status = 'APPROVED' " +
+            "AND ((lr.startDate <= :endDate AND lr.endDate >= :startDate)) " +
+            "ORDER BY lr.startDate")
     List<LeaveRequest> findTeamLeavesInDateRange(
             @Param("department") String department,
             @Param("startDate") LocalDate startDate,
@@ -30,6 +44,15 @@ public interface LeaveRequestRepository extends JpaRepository<LeaveRequest, Long
     // ============= Count Queries =============
     long countByStatus(LeaveStatus status);
 
+    @Query("SELECT COUNT(lr) FROM LeaveRequest lr WHERE lr.employee.id = :employeeId " +
+            "AND lr.status = 'APPROVED' " +
+            "AND lr.startDate >= :startDate AND lr.endDate <= :endDate")
+    long countApprovedLeavesInPeriod(
+            @Param("employeeId") Long employeeId,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate
+    );
+
 
     // ============= Statistics Queries =============
     @Query("SELECT lr.status, COUNT(lr) FROM LeaveRequest lr GROUP BY lr.status")
@@ -37,7 +60,6 @@ public interface LeaveRequestRepository extends JpaRepository<LeaveRequest, Long
 
     /**
      * Get monthly leave statistics
-     * FIXED FOR POSTGRESQL: Uses EXTRACT instead of MONTH/YEAR
      */
     @Query(value = "SELECT EXTRACT(MONTH FROM start_date) as month, COUNT(*) " +
             "FROM leave_requests " +
