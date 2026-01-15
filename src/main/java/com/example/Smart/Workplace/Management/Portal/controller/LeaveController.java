@@ -15,7 +15,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/leave")
-@RequiredArgsConstructor  // Better than @Autowired
+@RequiredArgsConstructor
+@CrossOrigin(origins = {"smart-workplace-management-portal.vercel.app","http://localhost:5173/"})
 public class LeaveController {
 
     private final LeaveService leaveService;
@@ -56,26 +57,26 @@ public class LeaveController {
     /**
      * Approve a leave request
      */
-    @PutMapping("/{id}/approve")
+    @PatchMapping("/{id}/approve")
     @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
-    public ResponseEntity<LeaveRequestDto> approveLeave(
+    public ResponseEntity<Void> approveLeave(
             @PathVariable Long id,
             Authentication authentication) {
         String managerUsername = authentication.getName();
-        LeaveRequestDto approvedRequest = leaveService.updateLeaveStatus(id, LeaveStatus.APPROVED, managerUsername);
-        return ResponseEntity.ok(approvedRequest);
+        leaveService.updateLeaveStatus(id, LeaveStatus.APPROVED, managerUsername);
+        return ResponseEntity.ok().build();
     }
 
     /**
      * Reject a leave request
      */
-    @PutMapping("/{id}/reject")
+    @PatchMapping("/{id}/reject")
     @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
-    public ResponseEntity<LeaveRequestDto> rejectLeave(
+    public ResponseEntity<Void> rejectLeave(
             @PathVariable Long id,
             Authentication authentication) {
         String managerUsername = authentication.getName();
-        LeaveRequestDto rejectedRequest = leaveService.updateLeaveStatus(id, LeaveStatus.REJECTED, managerUsername);
-        return ResponseEntity.ok(rejectedRequest);
+        leaveService.updateLeaveStatus(id, LeaveStatus.REJECTED, managerUsername);
+        return ResponseEntity.ok().build();
     }
 }

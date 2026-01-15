@@ -1,6 +1,7 @@
 package com.example.Smart.Workplace.Management.Portal.controller;
 
 import com.example.Smart.Workplace.Management.Portal.dto.ComplaintDto;
+import com.example.Smart.Workplace.Management.Portal.model.ComplaintStatus;
 import com.example.Smart.Workplace.Management.Portal.service.ComplaintService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/complaints")
 @RequiredArgsConstructor
+@CrossOrigin(origins = {"smart-workplace-management-portal.vercel.app","http://localhost:5173/"})
 public class ComplaintController {
 
     private final ComplaintService complaintService;
@@ -72,26 +74,26 @@ public class ComplaintController {
     /**
      * Assign complaint to staff
      */
-    @PutMapping("/{id}/assign/{staffId}")
+    @PatchMapping("/{id}/assign/{staffId}")
     @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
-    public ResponseEntity<ComplaintDto> assignComplaint(
+    public ResponseEntity<Void> assignComplaint(
             @PathVariable Long id,
             @PathVariable Long staffId,
             Authentication authentication) {
-        ComplaintDto updated = complaintService.assignComplaint(id, staffId, authentication.getName());
-        return ResponseEntity.ok(updated);
+        complaintService.assignComplaint(id, staffId, authentication.getName());
+        return ResponseEntity.ok().build();
     }
 
     /**
      * Update complaint status/resolution
      */
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}/status")
     public ResponseEntity<ComplaintDto> updateComplaint(
             @PathVariable Long id,
-            @Valid @RequestBody ComplaintDto complaintDto,
+            @RequestParam ComplaintStatus status,
             Authentication authentication) {
-        ComplaintDto updated = complaintService.updateComplaint(id, complaintDto, authentication.getName());
-        return ResponseEntity.ok(updated);
+        complaintService.updateComplaint(id, status, authentication.getName());
+        return ResponseEntity.ok().build();
     }
 
     /**

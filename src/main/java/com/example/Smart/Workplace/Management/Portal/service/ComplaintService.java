@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -133,7 +134,7 @@ public class ComplaintService {
      * Update complaint status and resolution
      */
     @Transactional
-    public ComplaintDto updateComplaint(Long complaintId, ComplaintDto dto, String username) {
+    public void updateComplaint(Long complaintId, ComplaintStatus newStatus, String username) {
         log.info("Updating complaint {} by user: {}", complaintId, username);
 
         Complaint complaint = complaintRepository.findById(complaintId)
@@ -142,22 +143,23 @@ public class ComplaintService {
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        // Check if user is assigned to this complaint or is admin
-        if (complaint.getAssignedTo() == null ||
-                (!complaint.getAssignedTo().getId().equals(user.getId()) &&
-                        user.getRole() != Role.ADMIN)) {
-            throw new AccessDeniedException("You are not authorized to update this complaint");
+
+        boolean isAuthorized = user.getRole() == Role.ADMIN ||
+                user.getRole() == Role.MANAGER ||
+                (complaint.getAssignedTo() != null && complaint.getAssignedTo().getId().equals(user.getId()));
+
+        if (!isAuthorized) {
+            throw new AccessDeniedException("Not authorized to update this complaint status");
         }
 
-        if (dto.getStatus() != null) {
-            complaint.setStatus(dto.getStatus());
+        complaint.setStatus(newStatus);
+
+        // Auto-set timestamps
+        if (newStatus == ComplaintStatus.RESOLVED) {
+            complaint.setResolvedAt(LocalDateTime.now());
         }
 
-        if (dto.getResolution() != null) {
-            complaint.setResolution(dto.getResolution());
-        }
-
-        return mapToDto(complaintRepository.save(complaint));
+        complaintRepository.save(complaint);
     }
 
     /**

@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 @PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = {"smart-workplace-management-portal.vercel.app","http://localhost:5173/"})
 public class AdminController {
 
     private final UserRepository userRepository;

@@ -17,11 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
-/**
- * Service layer for managing leave requests
- * Handles business logic for leave submission, approval, and rejection
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -33,12 +28,6 @@ public class LeaveService {
 
     /**
      * Submit a new leave request
-     *
-     * @param dto Leave request details
-     * @param username Email of the employee submitting the request
-     * @return Created leave request DTO
-     * @throws UsernameNotFoundException if user not found
-     * @throws IllegalArgumentException if date validation fails
      */
     @Transactional
     public LeaveRequestDto submitLeaveRequest(LeaveRequestDto dto, String username) {
@@ -75,10 +64,6 @@ public class LeaveService {
 
     /**
      * Get all leave requests for the authenticated employee
-     *
-     * @param username Email of the employee
-     * @return List of leave request DTOs
-     * @throws UsernameNotFoundException if user not found
      */
     public List<LeaveRequestDto> getMyLeaveRequests(String username) {
         log.info("Fetching leave requests for user: {}", username);
@@ -100,9 +85,6 @@ public class LeaveService {
 
     /**
      * Get all leave requests in the system
-     * Only accessible by MANAGER and ADMIN roles (enforced by @PreAuthorize in controller)
-     *
-     * @return List of all leave request DTOs
      */
     public List<LeaveRequestDto> getAllLeaveRequests() {
         log.info("Fetching all leave requests");
@@ -118,17 +100,9 @@ public class LeaveService {
 
     /**
      * Update leave request status (approve or reject)
-     *
-     * @param leaveId ID of the leave request
-     * @param status New status (APPROVED or REJECTED)
-     * @param managerUsername Email of the manager performing the action
-     * @return Updated leave request DTO
-     * @throws UsernameNotFoundException if manager not found
-     * @throws AccessDeniedException if user doesn't have manager/admin role
-     * @throws IllegalArgumentException if leave request not found
      */
     @Transactional
-    public LeaveRequestDto updateLeaveStatus(Long leaveId, LeaveStatus status, String managerUsername) {
+    public void updateLeaveStatus(Long leaveId, LeaveStatus status, String managerUsername) {
         log.info("Updating leave request {} to status {} by manager: {}",
                 leaveId, status, managerUsername);
 
@@ -166,17 +140,14 @@ public class LeaveService {
         leaveRequest.setStatus(status);
         leaveRequest.setManager(manager);
 
-        LeaveRequest updatedRequest = leaveRequestRepository.save(leaveRequest);
-        log.info("Leave request {} successfully updated to status {}", leaveId, status);
+        leaveRequestRepository.save(leaveRequest);
 
-        return mapToDto(updatedRequest);
+
+
     }
 
     /**
      * Map LeaveRequest entity to LeaveRequestDto
-     *
-     * @param leaveRequest Entity to map
-     * @return Mapped DTO
      */
     private LeaveRequestDto mapToDto(LeaveRequest leaveRequest) {
         LeaveRequestDto dto = new LeaveRequestDto();
