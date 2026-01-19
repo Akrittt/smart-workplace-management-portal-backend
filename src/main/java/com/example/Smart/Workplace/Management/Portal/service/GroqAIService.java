@@ -96,7 +96,8 @@ public class GroqAIService {
                         jsonResponse.getAsJsonArray("choices").size() > 0) {
 
                     return jsonResponse.getAsJsonArray("choices")
-                            .get(0).getAsJsonObject()
+                            .get(0)
+                            .getAsJsonObject()
                             .getAsJsonObject("message");
                 } else {
                     log.error("Unexpected response format: {}", responseBody);

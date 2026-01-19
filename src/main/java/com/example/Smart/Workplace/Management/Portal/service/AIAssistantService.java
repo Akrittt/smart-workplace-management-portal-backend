@@ -51,6 +51,7 @@ public class AIAssistantService {
         log.info("Processing message for user: {}", username);
 
         try {
+            // Input Validation
             if (message == null || message.trim().isEmpty()) {
                 return "Please provide a message.";
             }
@@ -316,7 +317,7 @@ public class AIAssistantService {
                 );
             }
 
-            // Complaint Data - WITHOUT accessing LOB fields
+            // Complaint Data
             List<Complaint> complaints = complaintRepository.findByUserId(user.getId());
             context.append("\nComplaint Summary:\n");
 

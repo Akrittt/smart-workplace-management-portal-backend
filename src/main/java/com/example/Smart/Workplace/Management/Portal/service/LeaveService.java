@@ -53,6 +53,7 @@ public class LeaveService {
         leaveRequest.setStartDate(dto.getStartDate());
         leaveRequest.setEndDate(dto.getEndDate());
         leaveRequest.setReason(dto.getReason());
+        leaveRequest.setSubmittedAt(LocalDateTime.now());
         leaveRequest.setStatus(LeaveStatus.PENDING);
 
         // Save and return
